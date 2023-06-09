@@ -20,3 +20,4 @@ class GlobalController extends GetxController {
 
   getLocation() async {}
 }
+//24:08

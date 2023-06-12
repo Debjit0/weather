@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class GlobalController extends GetxController {
@@ -12,12 +15,40 @@ class GlobalController extends GetxController {
 
   @override
   void onInit() {
-    if (isLoading == true) {
+    if (isLoading.isTrue) {
       getLocation();
     }
+    isLoading = false.obs;
     super.onInit();
   }
 
-  getLocation() async {}
+  getLocation() async {
+    bool isServiceEnabled;
+    isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    LocationPermission locationPermission;
+    //if permission is not enabled
+    if (isServiceEnabled == false) {
+      return Future.error("Locatiom is not enabled");
+    }
+
+    //status of location permission
+    locationPermission = await Geolocator.checkPermission();
+
+    if (locationPermission == LocationPermission.deniedForever) {
+      return Future.error("Location permission is denied forever");
+    } else if (locationPermission == LocationPermission.denied) {
+      locationPermission = await Geolocator.requestPermission();
+      if (locationPermission == LocationPermission.denied) {
+        return Future.error("Location permission is denied");
+      }
+    }
+
+    //get current location
+    return Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((value) {
+      Latitude.value = value.latitude;
+      Longitude.value = value.longitude;
+    });
+  }
 }
-//24:08
+//24.08

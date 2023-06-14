@@ -19,8 +19,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         theme: ThemeData(
+            useMaterial3: true,
             primaryColor: Constants().primaryColor,
-            scaffoldBackgroundColor: Colors.black),
-        home: HomePage());
+            scaffoldBackgroundColor: Color.fromARGB(255, 0, 0, 0)),
+        home: LocationPage());
   }
 }

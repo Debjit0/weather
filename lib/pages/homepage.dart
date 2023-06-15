@@ -105,23 +105,28 @@ class _LocationPageState extends State<LocationPage> {
         : Scaffold(
             //appBar: AppBar(title: const Text("Location Page")),
             body: SafeArea(
-              child: Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'LAT: ${_currentPosition?.latitude ?? ""}',
-                      style: TextStyle(color: Colors.amber),
+                    Center(
+                      child: Text(
+                        '${_currentAddress ?? ""}',
+                        style: TextStyle(
+                            color: Colors.white54,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
                     ),
                     Text(
-                      'LNG: ${_currentPosition?.longitude ?? ""}',
-                      style: TextStyle(color: Colors.amber),
+                      "31" + "\u00B0",
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 150,
+                          color: Colors.white),
                     ),
-                    Text(
-                      'ADDRESS: ${_currentAddress ?? ""}',
-                      style: TextStyle(color: Colors.amber),
-                    ),
-                    const SizedBox(height: 32),
                   ],
                 ),
               ),

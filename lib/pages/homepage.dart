@@ -74,7 +74,9 @@ class _LocationPageState extends State<LocationPage> {
   void initState() {
     // TODO: implement initState
     _getCurrentPosition().whenComplete(() {
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 

@@ -11,7 +11,8 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
-  String? _currentAddress;
+  String? _currentAddressLocality;
+  String? _currentAddressSublocality;
   Position? _currentPosition;
   bool isLoading = true;
 
@@ -61,9 +62,13 @@ class _LocationPageState extends State<LocationPage> {
     await placemarkFromCoordinates(
             _currentPosition!.latitude, _currentPosition!.longitude)
         .then((List<Placemark> placemarks) {
+          print(_currentPosition!.latitude);
       Placemark place = placemarks[0];
+      print(place);
       setState(() {
-        _currentAddress = '${place.subLocality}';
+        _currentAddressLocality = '${place.locality}';
+        _currentAddressSublocality = "${place.subLocality}";
+        print("$_currentAddressLocality-curradd");
       });
     }).catchError((e) {
       debugPrint(e);
@@ -113,15 +118,34 @@ class _LocationPageState extends State<LocationPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    (_currentAddressSublocality=="")?
+                      Center(
+                      child: Text(
+                        '${_currentAddressLocality ?? ""}',
+                        style: TextStyle(
+                            color: Colors.white54,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    ):
                     Center(
                       child: Text(
-                        '${_currentAddress ?? ""}',
+                        '${_currentAddressSublocality ?? ""}',
                         style: TextStyle(
                             color: Colors.white54,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
                     ),
+                    /*Center(
+                      child: Text(
+                        '${_currentAddressLocality ?? ""}',
+                        style: TextStyle(
+                            color: Colors.white54,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    ),*/
                     Text(
                       "31" + "\u00B0",
                       style: TextStyle(

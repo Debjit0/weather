@@ -1,4 +1,8 @@
-
+//instance for getting the api response
+class WeatherDataCurrent{
+  final Current current;
+  WeatherDataCurrent({required this.current});
+}
 
 class Current {
   double? temp;

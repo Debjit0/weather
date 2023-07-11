@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_app/api/fetchWeather.dart';
 
 class Helper {
   //create variables
@@ -28,6 +29,6 @@ class Helper {
     //get current location
     return Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+
   }
 }
-//24.08

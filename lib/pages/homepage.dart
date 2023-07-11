@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_app/api/fetchWeather.dart';
+import 'package:weather_app/model/weather_data.dart';
+import 'package:weather_app/model/weather_data_current.dart';
 
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key}) : super(key: key);
@@ -15,6 +18,11 @@ class _LocationPageState extends State<LocationPage> {
   String? _currentAddressSublocality;
   Position? _currentPosition;
   bool isLoading = true;
+  //late WeatherData x;
+  final fwa = FetchWeatherAPI();
+  fetch(){
+    fwa.processData(_currentPosition!.latitude.toString(),_currentPosition!.longitude.toString());
+  }
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -79,6 +87,7 @@ class _LocationPageState extends State<LocationPage> {
   void initState() {
     // TODO: implement initState
     _getCurrentPosition().whenComplete(() {
+      fetch();
       setState(() {
         isLoading = false;
       });

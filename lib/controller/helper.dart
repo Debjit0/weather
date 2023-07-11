@@ -1,5 +1,5 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_app/api/fetchWeather.dart';
+//import 'package:weather_app/api/fetchWeather.dart';
 
 class Helper {
   //create variables

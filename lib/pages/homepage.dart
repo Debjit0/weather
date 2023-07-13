@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/weather.dart';
@@ -8,8 +9,7 @@ import 'package:weather_app/pages/detailspage.dart';
 import 'package:weather_app/pages/searchpage.dart';
 import 'package:weather_app/utils/routers.dart';
 //import 'package:weather_app/api/fetchWeather.dart';
-//import 'package:weather_app/model/weather_data.dart';
-//import 'package:weather_app/model/weather_data_current.dart';
+//import 'package:weather_app/model/weather_data.dart
 
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key}) : super(key: key);
@@ -28,14 +28,19 @@ class _LocationPageState extends State<LocationPage> {
   String humidity = "";
   int weatherConditionCode = 0;
   String imageCode = "5";
-  String weatherCondition = "";
+  String weatherCondition = "Not Found";
   String windSpeed = "";
+  String rainLast3Hours = "";
+  String sunrise = "";
+  String sunset = "";
   //late WeatherData x;
   //final fwa = FetchWeatherAPI();
   fetch() {
     //print("Called Fetch");
     //fwa.processData(_currentPosition!.latitude.toString(),_currentPosition!.longitude.toString());
   }
+
+  
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -106,7 +111,12 @@ class _LocationPageState extends State<LocationPage> {
     windSpeed = w.windSpeed.toString();
     weatherConditionCode = int.parse(w.weatherConditionCode.toString());
     weatherCondition = w.weatherDescription.toString();
-    print(w.windSpeed);
+    weatherCondition = weatherCondition.replaceFirst(weatherCondition[0], weatherCondition[0].toUpperCase());
+    sunrise = w.sunrise.toString();
+    sunset = w.sunset.toString();
+    rainLast3Hours = w.rainLast3Hours.toString();
+
+    print("${w.rainLast3Hours} rain in last 3 hour");
     if (weatherConditionCode >= 801 && weatherConditionCode <= 804) {
       imageCode = "35";
     } else if (weatherConditionCode == 800) {
@@ -114,7 +124,7 @@ class _LocationPageState extends State<LocationPage> {
     }else if (weatherConditionCode >= 600 && weatherConditionCode <= 622) {
       imageCode = "36";
     } else if (weatherConditionCode >= 500 && weatherConditionCode <= 531) {
-      imageCode = "39";
+      imageCode = "22";
     }else if (weatherConditionCode >= 300 && weatherConditionCode <= 321) {
       imageCode = "5";
     }else if (weatherConditionCode >= 200 && weatherConditionCode <= 231) {
@@ -148,7 +158,7 @@ class _LocationPageState extends State<LocationPage> {
                         children: [
                           Container(
                             height: 250,
-                            child: Image.asset("images/yellowblue.png"),
+                            child: Image.asset("images/yellowblue.png",opacity: const AlwaysStoppedAnimation(.4),),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -203,9 +213,9 @@ class _LocationPageState extends State<LocationPage> {
                                     '${_currentAddressLocality ?? ""}',
                                     style: TextStyle(
                                         color: Colors.white54,
-                                        //fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 20),
-                                  ),
+                                  ).animate().fade().slide(),
                                 )
                               : Center(
                                   child: Text(
@@ -214,7 +224,7 @@ class _LocationPageState extends State<LocationPage> {
                                         color: Colors.white54,
                                         //fontWeight: FontWeight.bold,
                                         fontSize: 20),
-                                  ),
+                                  ).animate().fade().slide(),
                                 ),
                         ],
                       ),
@@ -238,10 +248,10 @@ class _LocationPageState extends State<LocationPage> {
                             child: Text(
                               "Today's Weather",
                               style: TextStyle(
-                                  fontSize: 30,
+                                  fontSize: 35,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
-                            ),
+                            ).animate().fade().slide(),
                           ),
                         ],
                       ),
@@ -250,7 +260,7 @@ class _LocationPageState extends State<LocationPage> {
                         children: [
                           Container(
                             height: 250,
-                            child: Image.asset("images/yellowblue.png",opacity: const AlwaysStoppedAnimation(.6),),
+                            child: Image.asset("images/yellowblue.png",opacity: const AlwaysStoppedAnimation(.4),),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -273,20 +283,37 @@ class _LocationPageState extends State<LocationPage> {
                       Text(
                         weatherCondition,
                         style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
                         ),
                       ),
-                      Text(
-                        " " + temp.substring(0, 2) + "\u00B0",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 100,
-                            color: Colors.white),
+                      Row(mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            " " + temp.substring(0, 2),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 100,
+                                color: Colors.white),
+                          ),
+                          Text(
+                            "\u00B0",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 100,
+                                color: Colors.blue),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 30,),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        height: 150,
+                        //color: Colors.grey,
+                        decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 24, 26, 34),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -310,6 +337,41 @@ class _LocationPageState extends State<LocationPage> {
                             Text(feelsLike.substring(0,2)+ "\u00B0 C",style: TextStyle(color: Colors.white),),
                             SizedBox(height: 10,),
                             Text("Feels Like",style: TextStyle(color: Colors.grey),)
+                          ],)
+                        ],),
+                      ),
+                      SizedBox(height: 30,),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        height: 150,
+                        //color: Colors.grey,
+                        decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 24, 26, 34),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                          Column(children: [
+                            Container(child: Image.asset("images/26.png"),height: 50,),
+                            SizedBox(height: 10,),
+                            Text("${sunrise.substring(11,16)}",style: TextStyle(color: Colors.white),),
+                            SizedBox(height: 10,),
+                            Text("Sunrise",style: TextStyle(color: Colors.grey),)
+                          ],),
+                          
+                          Column(children: [
+                            Container(child: Image.asset("images/10.png"),height: 50,),
+                            SizedBox(height: 10,),
+                            Text("${sunset.substring(11,16)}",style: TextStyle(color: Colors.white),),
+                            SizedBox(height: 10,),
+                            Text("Feels Like",style: TextStyle(color: Colors.grey),)
+                          ],),
+                          Column(children: [
+                            Container(child: Image.asset("images/39.png"),height: 50,),
+                            SizedBox(height: 10,),
+                            Text(rainLast3Hours,style: TextStyle(color: Colors.white),),
+                            SizedBox(height: 10,),
+                            Text("Last 3 hrs",style: TextStyle(color: Colors.grey),)
                           ],)
                         ],),
                       )

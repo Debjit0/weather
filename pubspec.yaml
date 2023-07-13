@@ -31,10 +31,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_animate: ^4.2.0
   geocoding: ^2.1.0
   geolocator: ^9.0.2
   get: ^4.6.5
-  http: 0.13.1
   weather: ^3.0.0
 
 dev_dependencies:
